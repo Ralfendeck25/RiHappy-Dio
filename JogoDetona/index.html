@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detona Ralph</title>
+
+    <link rel="stylesheet" href="./src/styles/reset.css" />
+    <link rel="stylesheet" href="./src/styles/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body>
+    <!-- Tela de Início -->
+    <div class="start-screen" id="startScreen">
+        <div class="start-content">
+            <h1 class="game-title">JOGO DETONA</h1>
+            <div class="character-animation">
+                <img src="./src/images/player.png" alt="Ralph" class="ralph-img" height="60px">
+                <div class="pulse"></div>
+            </div>
+            <p class="game-instructions">Clique na luz que aparecere para ganhar pontos!</p>
+            <div class="difficulty-buttons">
+                <button class="difficulty-btn" data-level="easy">Fácil</button>
+                <button class="difficulty-btn" data-level="medium">Médio</button>
+                <button class="difficulty-btn" data-level="hard">Difícil</button>
+            </div>
+            <button class="start-btn" id="startBtn">
+                <i class="fas fa-play"></i> COMEÇAR JOGO
+            </button>
+            <div class="high-score">
+                <i class="fas fa-trophy"></i>
+                <span>Recorde: <span id="highScore">0</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jogo Principal -->
+    <div class="container" id="gameContainer" style="display: none;">
+        <!-- Header com informações -->
+        <div class="game-header">
+            <div class="header-left">
+                <div class="menu-lives">
+                    <div class="hearts">
+                        <i class="fas fa-heart"></i>
+                        <i class="fas fa-heart"></i>
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <span class="lives-text">x3</span>
+                </div>
+            </div>
+            
+            <div class="header-center">
+                <h1 class="game-logo">JOGO DETONA</h1>
+            </div>
+            
+            <div class="header-right">
+                <div class="menu-time">
+                    <i class="fas fa-clock"></i>
+                    <span id="time-left">01:00</span>
+                </div>
+                <div class="menu-score">
+                    <i class="fas fa-star"></i>
+                    <span id="score">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Painel do jogo -->
+        <div class="panel-container">
+            <div class="combo-display" id="comboDisplay">
+                <span>COMBO x<span id="comboCount">0</span></span>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-row">
+                    <div class="square" id="1">
+                        <div class="square-content"></div>
+                    </div>
+                    <div class="square" id="2">
+                        <div class="square-content"></div>
+                    </div>
+                    <div class="square" id="3">
+                        <div class="square-content"></div>
+                    </div>
+                </div>
+
+                <div class="panel-row">
+                    <div class="square" id="4">
+                        <div class="square-content"></div>
+                    </div>
+                    <div class="square" id="5">
+                        <div class="square-content"></div>
+                    </div>
+                    <div class="square" id="6">
+                        <div class="square-content"></div>
+                    </div>
+                </div>
+
+                <div class="panel-row">
+                    <div class="square" id="7">
+                        <div class="square-content"></div>
+                    </div>
+                    <div class="square" id="8">
+                        <div class="square-content"></div>
+                    </div>
+                    <div class="square" id="9">
+                        <div class="square-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles -->
+        <div class="controls">
+            <button class="control-btn" id="pauseBtn">
+                <i class="fas fa-pause"></i> Pausar
+            </button>
+            <button class="control-btn" id="soundBtn">
+                <i class="fas fa-volume-up"></i> Som
+            </button>
+            <button class="control-btn" id="restartBtn">
+                <i class="fas fa-redo"></i> Reiniciar
+            </button>
+        </div>
+    </div>
+
+    <!-- Tela de Game Over -->
+    <div class="game-over-screen" id="gameOverScreen" style="display: none;">
+        <div class="game-over-content">
+            <h2>GAME OVER</h2>
+            <div class="result-stats">
+                <div class="stat">
+                    <i class="fas fa-star"></i>
+                    <span>Pontuação: <span id="finalScore">0</span></span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-trophy"></i>
+                    <span>Recorde: <span id="finalHighScore">0</span></span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-bolt"></i>
+                    <span>Maior Combo: <span id="maxCombo">0</span></span>
+                </div>
+            </div>
+            <div class="game-over-buttons">
+                <button class="game-over-btn" id="playAgainBtn">
+                    <i class="fas fa-play"></i> Jogar Novamente
+                </button>
+                <button class="game-over-btn" id="menuBtn">
+                    <i class="fas fa-home"></i> Menu Principal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Efeitos de partículas -->
+    <div id="particles"></div>
+
+    <script src="./src/scripts/engines.js" defer></script>
+</body>
+</html>

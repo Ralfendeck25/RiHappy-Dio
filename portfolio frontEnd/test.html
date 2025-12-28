@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>
+			Peterson PARIS | Full Stack Developer & CNC Machining Operator
+		</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+		/>
+		<style>
+			/* ... (mantenha todo o CSS anterior igual) ... */
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			:root {
+				--space-bg: #0a0a1a;
+				--dark-blue: #001220;
+				--accent-blue: #00d9ff;
+				--accent-purple: #9d4edd;
+				--accent-green: #00ff9d;
+				--text-primary: #ffffff;
+				--text-secondary: #b0b8d0;
+				--card-bg: rgba(16, 18, 36, 0.9);
+				--glow-blue: 0 0 30px rgba(0, 217, 255, 0.3);
+				--glow-purple: 0 0 30px rgba(157, 78, 221, 0.3);
+			}
+
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter',
+					sans-serif;
+				background: linear-gradient(
+					135deg,
+					var(--space-bg) 0%,
+					var(--dark-blue) 100%
+				);
+				color: var(--text-primary);
+				min-height: 100vh;
+				line-height: 1.6;
+			}
+
+			/* Loading Screen */
+			.loading {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: var(--space-bg);
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				z-index: 1000;
+				transition: opacity 0.5s ease;
+			}
+
+			.loading.hidden {
+				opacity: 0;
+				pointer-events: none;
+			}
+
+			.spinner {
+				width: 50px;
+				height: 50px;
+				border: 3px solid rgba(255, 255, 255, 0.1);
+				border-top: 3px solid var(--accent-blue);
+				border-radius: 50%;
+				animation: spin 1s linear infinite;
+				margin-bottom: 20px;
+			}
+
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+
+			.container {
+				max-width: 1400px;
+				margin: 0 auto;
+				padding: 0 20px;
+			}
+
+			/* Header */
+			.header {
+				padding: 3rem 0 2rem;
+				text-align: center;
+			}
+
+			.developer-name {
+				font-size: 3.5rem;
+				font-weight: 800;
+				background: linear-gradient(
+					135deg,
+					var(--accent-blue),
+					var(--accent-green)
+				);
+				-webkit-background-clip: text;
+				background-clip: text;
+				color: transparent;
+				margin-bottom: 0.5rem;
+				letter-spacing: -0.5px;
+			}
+
+			.developer-title {
+				font-size: 1.2rem;
+				color: var(--text-secondary);
+				font-weight: 300;
+				margin-bottom: 1rem;
+			}
+
+			.github-stats {
+				display: flex;
+				justify-content: center;
+				gap: 2rem;
+				margin-top: 1rem;
+				flex-wrap: wrap;
+			}
+
+			.stat {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				color: var(--text-secondary);
+				font-size: 0.9rem;
+			}
+
+			.stat i {
+				color: var(--accent-blue);
+			}
+
+			/* Main Layout */
+			.main-grid {
+				display: grid;
+				grid-template-columns: 1fr 1.2fr;
+				gap: 3rem;
+				margin: 2rem 0;
+			}
+
+			@media (max-width: 1100px) {
+				.main-grid {
+					grid-template-columns: 1fr;
+					gap: 2rem;
+				}
+			}
+
+			/* Tech Galaxy */
+			.tech-galaxy {
+				position: relative;
+				height: 500px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.galaxy-center {
+				position: absolute;
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				background: linear-gradient(
+					135deg,
+					var(--accent-blue),
+					var(--accent-purple)
+				);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				animation: pulse 3s infinite alternate;
+				z-index: 10;
+			}
+
+			@keyframes pulse {
+				0% {
+					transform: scale(1);
+					box-shadow: 0 0 0 0 rgba(0, 217, 255, 0.4);
+				}
+				100% {
+					transform: scale(1.05);
+					box-shadow: 0 0 0 20px rgba(0, 217, 255, 0);
+				}
+			}
+
+			.galaxy-center i {
+				font-size: 1.8rem;
+				color: white;
+			}
+
+			.tech-orbit {
+				position: absolute;
+				border-radius: 50%;
+				border: 1px solid rgba(255, 255, 255, 0.05);
+				animation: rotate linear infinite;
+			}
+
+			.tech-orbit:nth-child(2) {
+				width: 350px;
+				height: 350px;
+				animation-duration: 40s;
+			}
+			.tech-orbit:nth-child(3) {
+				width: 250px;
+				height: 250px;
+				animation-duration: 30s;
+			}
+			.tech-orbit:nth-child(4) {
+				width: 450px;
+				height: 450px;
+				animation-duration: 50s;
+			}
+
+			@keyframes rotate {
+				from {
+					transform: rotate(0deg);
+				}
+				to {
+					transform: rotate(360deg);
+				}
+			}
+
+			/* Tech Cards */
+			.tech-card {
+				position: absolute;
+				width: 70px;
+				height: 70px;
+				border-radius: 12px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+				background: rgba(255, 255, 255, 0.05);
+				backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			.tech-card:hover {
+				transform: scale(1.15) translateY(-5px);
+				background: rgba(255, 255, 255, 0.1);
+				border-color: var(--accent-blue);
+				box-shadow: var(--glow-blue);
+				z-index: 100;
+			}
+
+			.tech-card.active {
+				transform: scale(1.2);
+				background: rgba(0, 217, 255, 0.1);
+				border-color: var(--accent-blue);
+				box-shadow: var(--glow-blue);
+			}
+
+			.tech-logo {
+				width: 40px;
+				height: 40px;
+				object-fit: contain;
+				filter: none;
+			}
+
+			.tech-card:hover .tech-logo {
+				transform: scale(1.1);
+			}
+
+			/* Content Panel */
+			.content-panel {
+				background: var(--card-bg);
+				border-radius: 20px;
+				padding: 2rem;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				backdrop-filter: blur(10px);
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+				min-height: 500px;
+			}
+
+			.panel-header {
+				display: flex;
+				align-items: center;
+				gap: 1rem;
+				margin-bottom: 2rem;
+				padding-bottom: 1rem;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			.panel-header i {
+				font-size: 1.5rem;
+				color: var(--accent-blue);
+			}
+
+			.panel-header h2 {
+				font-size: 1.5rem;
+				font-weight: 600;
+				color: var(--text-primary);
+			}
+
+			/* Content Sections */
+			.content-section {
+				display: none;
+				animation: fadeIn 0.5s ease;
+			}
+
+			.content-section.active {
+				display: block;
+			}
+
+			@keyframes fadeIn {
+				from {
+					opacity: 0;
+					transform: translateY(10px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			/* About Section */
+			.about-content {
+				padding: 1rem 0;
+			}
+
+			.about-text {
+				color: var(--text-secondary);
+				line-height: 1.8;
+				margin-bottom: 2rem;
+				font-size: 1.1rem;
+			}
+
+			.tech-stats {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1rem;
+				margin-top: 2rem;
+			}
+
+			.tech-stat {
+				text-align: center;
+				padding: 1.5rem;
+				background: rgba(255, 255, 255, 0.03);
+				border-radius: 12px;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			.tech-stat-value {
+				font-size: 2rem;
+				font-weight: 700;
+				color: var(--accent-blue);
+				margin-bottom: 0.5rem;
+			}
+
+			.tech-stat-label {
+				font-size: 0.9rem;
+				color: var(--text-secondary);
+				text-transform: uppercase;
+				letter-spacing: 1px;
+			}
+
+			/* Skill Details */
+			.skill-details {
+				padding: 1rem 0;
+			}
+
+			.skill-header {
+				display: flex;
+				align-items: center;
+				gap: 1rem;
+				margin-bottom: 1.5rem;
+			}
+
+			.skill-logo {
+				width: 60px;
+				height: 60px;
+				object-fit: contain;
+			}
+
+			.skill-title {
+				font-size: 1.8rem;
+				font-weight: 600;
+				color: var(--text-primary);
+			}
+
+			.skill-description {
+				color: var(--text-secondary);
+				line-height: 1.7;
+				margin-bottom: 1.5rem;
+			}
+
+			.skill-info {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 1rem;
+				margin: 1.5rem 0;
+			}
+
+			.info-item {
+				background: rgba(255, 255, 255, 0.03);
+				padding: 1rem;
+				border-radius: 8px;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			.info-label {
+				font-size: 0.9rem;
+				color: var(--text-secondary);
+				margin-bottom: 0.5rem;
+			}
+
+			.info-value {
+				font-size: 1.2rem;
+				color: var(--accent-blue);
+				font-weight: 600;
+			}
+
+			/* GitHub Projects */
+			.github-projects {
+				margin-top: 2rem;
+			}
+
+			.projects-grid {
+				display: grid;
+				gap: 1rem;
+				margin-top: 1rem;
+			}
+
+			.project-card {
+				background: rgba(255, 255, 255, 0.03);
+				border-radius: 12px;
+				padding: 1.5rem;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				transition: all 0.3s ease;
+			}
+
+			.project-card:hover {
+				border-color: var(--accent-blue);
+				transform: translateY(-2px);
+				box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+			}
+
+			.project-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+				margin-bottom: 1rem;
+			}
+
+			.project-title {
+				font-size: 1.2rem;
+				font-weight: 600;
+				color: var(--text-primary);
+				margin-bottom: 0.5rem;
+			}
+
+			.project-description {
+				color: var(--text-secondary);
+				font-size: 0.95rem;
+				line-height: 1.6;
+				margin-bottom: 1rem;
+			}
+
+			.project-tech {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				margin-top: 1rem;
+			}
+
+			.tech-tag {
+				padding: 0.3rem 0.8rem;
+				background: rgba(0, 217, 255, 0.1);
+				border-radius: 20px;
+				font-size: 0.8rem;
+				color: var(--accent-blue);
+			}
+
+			.project-stats {
+				display: flex;
+				gap: 1rem;
+				margin-top: 1rem;
+				font-size: 0.9rem;
+				color: var(--text-secondary);
+			}
+
+			.project-stat {
+				display: flex;
+				align-items: center;
+				gap: 0.3rem;
+			}
+
+			/* Navigation */
+			.nav-tabs {
+				display: flex;
+				gap: 0.5rem;
+				margin-bottom: 2rem;
+				flex-wrap: wrap;
+			}
+
+			.nav-tab {
+				padding: 0.8rem 1.5rem;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 50px;
+				color: var(--text-secondary);
+				font-weight: 500;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.nav-tab:hover {
+				background: rgba(255, 255, 255, 0.1);
+				color: var(--text-primary);
+			}
+
+			.nav-tab.active {
+				background: linear-gradient(
+					135deg,
+					var(--accent-blue),
+					var(--accent-purple)
+				);
+				color: white;
+				border-color: transparent;
+			}
+
+			/* Contact */
+			.contact-links {
+				display: flex;
+				gap: 1rem;
+				margin-top: 2rem;
+				flex-wrap: wrap;
+			}
+
+			.contact-link {
+				padding: 1rem 1.5rem;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 12px;
+				color: var(--text-primary);
+				text-decoration: none;
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				transition: all 0.3s ease;
+			}
+
+			.contact-link:hover {
+				background: rgba(255, 255, 255, 0.1);
+				border-color: var(--accent-blue);
+				transform: translateY(-2px);
+			}
+
+			/* Footer */
+			.footer {
+				text-align: center;
+				padding: 3rem 0;
+				margin-top: 4rem;
+				border-top: 1px solid rgba(255, 255, 255, 0.1);
+				color: var(--text-secondary);
+				font-size: 0.9rem;
+			}
+
+			/* Responsive */
+			@media (max-width: 768px) {
+				.developer-name {
+					font-size: 2.5rem;
+				}
+
+				.tech-galaxy {
+					height: 400px;
+				}
+
+				.tech-orbit:nth-child(2) {
+					width: 280px;
+					height: 280px;
+				}
+				.tech-orbit:nth-child(3) {
+					width: 200px;
+					height: 200px;
+				}
+				.tech-orbit:nth-child(4) {
+					width: 350px;
+					height: 350px;
+				}
+
+				.tech-card {
+					width: 60px;
+					height: 60px;
+				}
+
+				.tech-logo {
+					width: 35px;
+					height: 35px;
+				}
+
+				.tech-stats {
+					grid-template-columns: 1fr;
+				}
+
+				.skill-info {
+					grid-template-columns: 1fr;
+				}
+			}
+
+			@media (max-width: 480px) {
+				.nav-tabs {
+					justify-content: center;
+				}
+
+				.contact-links {
+					flex-direction: column;
+				}
+			}
+			/* Footer Aprimorado */
+			.footer {
+				background: rgba(10, 10, 26, 0.95);
+				border-top: 1px solid rgba(0, 217, 255, 0.2);
+				padding: 4rem 0 2rem;
+				margin-top: 4rem;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.footer::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 1px;
+				background: linear-gradient(
+					90deg,
+					transparent,
+					var(--accent-blue),
+					var(--accent-purple),
+					var(--accent-green),
+					transparent
+				);
+			}
+
+			.footer-content {
+				max-width: 1400px;
+				margin: 0 auto;
+				padding: 0 20px;
+			}
+
+			.footer-grid {
+				display: grid;
+				grid-template-columns: 2fr 1fr 1fr;
+				gap: 3rem;
+				margin-bottom: 3rem;
+			}
+
+			@media (max-width: 768px) {
+				.footer-grid {
+					grid-template-columns: 1fr;
+					gap: 2rem;
+				}
+			}
+
+			.footer-section h3 {
+				font-size: 1.2rem;
+				color: var(--accent-blue);
+				margin-bottom: 1.5rem;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+			}
+
+			.footer-about p {
+				color: var(--text-secondary);
+				line-height: 1.8;
+				margin-bottom: 1.5rem;
+				font-size: 1rem;
+			}
+
+			.tech-tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				margin-top: 1rem;
+			}
+
+			.tech-tag {
+				padding: 0.4rem 0.8rem;
+				background: rgba(0, 217, 255, 0.1);
+				border: 1px solid rgba(0, 217, 255, 0.3);
+				border-radius: 20px;
+				font-size: 0.8rem;
+				color: var(--accent-blue);
+				transition: all 0.3s ease;
+			}
+
+			.tech-tag:hover {
+				background: rgba(0, 217, 255, 0.2);
+				transform: translateY(-2px);
+			}
+
+			.footer-links ul {
+				list-style: none;
+				padding: 0;
+			}
+
+			.footer-links li {
+				margin-bottom: 0.8rem;
+			}
+
+			.footer-links a {
+				color: var(--text-secondary);
+				text-decoration: none;
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				transition: all 0.3s ease;
+				font-size: 0.95rem;
+			}
+
+			.footer-links a:hover {
+				color: var(--accent-blue);
+				transform: translateX(5px);
+			}
+
+			.footer-links a i {
+				font-size: 0.9rem;
+				width: 20px;
+			}
+
+			.footer-contact p {
+				color: var(--text-secondary);
+				margin-bottom: 1rem;
+				display: flex;
+				align-items: center;
+				gap: 0.8rem;
+				font-size: 0.95rem;
+			}
+
+			.footer-contact i {
+				color: var(--accent-blue);
+				width: 20px;
+			}
+
+			.social-links {
+				display: flex;
+				gap: 1rem;
+				margin-top: 1.5rem;
+			}
+
+			.social-link {
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: var(--text-primary);
+				font-size: 1rem;
+				transition: all 0.3s ease;
+				text-decoration: none;
+			}
+
+			.social-link:hover {
+				background: var(--accent-blue);
+				border-color: var(--accent-blue);
+				transform: translateY(-3px);
+				box-shadow: 0 5px 15px rgba(0, 217, 255, 0.3);
+			}
+
+			.footer-bottom {
+				border-top: 1px solid rgba(255, 255, 255, 0.1);
+				padding-top: 2rem;
+				text-align: center;
+			}
+
+			.copyright {
+				color: var(--text-secondary);
+				font-size: 0.9rem;
+				margin-bottom: 1rem;
+			}
+
+			.github-live {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				color: var(--accent-blue);
+				font-size: 0.9rem;
+				text-decoration: none;
+				padding: 0.5rem 1rem;
+				background: rgba(0, 217, 255, 0.1);
+				border-radius: 20px;
+				transition: all 0.3s ease;
+			}
+
+			.github-live:hover {
+				background: rgba(0, 217, 255, 0.2);
+				transform: translateY(-2px);
+			}
+
+			.live-indicator {
+				display: inline-block;
+				width: 8px;
+				height: 8px;
+				background: var(--accent-green);
+				border-radius: 50%;
+				margin-right: 5px;
+				animation: pulse 2s infinite;
+			}
+
+			.stats-counter {
+				display: flex;
+				justify-content: center;
+				gap: 2rem;
+				margin-top: 1.5rem;
+				flex-wrap: wrap;
+			}
+
+			.stat-item {
+				text-align: center;
+			}
+
+			.stat-number {
+				font-size: 1.5rem;
+				font-weight: 700;
+				color: var(--accent-blue);
+				display: block;
+			}
+
+			.stat-label {
+				font-size: 0.8rem;
+				color: var(--text-secondary);
+				text-transform: uppercase;
+				letter-spacing: 1px;
+			}
+
+			@media (max-width: 480px) {
+				.stats-counter {
+					gap: 1rem;
+				}
+
+				.stat-number {
+					font-size: 1.2rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Loading Screen -->
+		<div class="loading" id="loading">
+			<div class="spinner"></div>
+			<p style="color: var(--text-secondary)">Carregando dados do GitHub...</p>
+		</div>
+
+		<div class="container">
+			<!-- Header -->
+			<header class="header">
+				<h1 class="developer-name">Peterson PARIS</h1>
+				<p class="developer-title">
+					Full Stack Developer, Tech Enthusiast & CNC Machining Operator
+				</p>
+
+				<div class="github-stats" id="githubStats">
+					<!-- Stats will be loaded from GitHub -->
+				</div>
+			</header>
+
+			<!-- Main Content -->
+			<div class="main-grid">
+				<!-- Tech Galaxy -->
+				<div class="tech-galaxy" id="techGalaxy">
+					<div class="galaxy-center">
+						<i class="fas fa-code"></i>
+					</div>
+					<div class="tech-orbit"></div>
+					<div class="tech-orbit"></div>
+					<div class="tech-orbit"></div>
+					<!-- Tech cards will be generated here -->
+				</div>
+
+				<!-- Content Panel -->
+				<div class="content-panel">
+					<!-- Navigation -->
+					<div class="nav-tabs">
+						<div class="nav-tab active" data-section="about">
+							<i class="fas fa-user"></i> Sobre
+						</div>
+						<div class="nav-tab" data-section="projects">
+							<i class="fas fa-project-diagram"></i> Projetos
+						</div>
+						<div class="nav-tab" data-section="contact">
+							<i class="fas fa-envelope"></i> Contato
+						</div>
+					</div>
+
+					<!-- Content Sections -->
+					<div class="content-section active" id="aboutSection">
+						<div class="panel-header">
+							<i class="fas fa-user"></i>
+							<h2>Sobre Mim</h2>
+							<img
+								src="avatar.jpg"
+								alt="Peterson PARIS"
+								style="
+									width: 75px;
+									height: 75px;
+									border-radius: 50%;
+									margin-left: auto;
+								"
+							/>
+						</div>
+						<div class="about-content">
+							<p class="about-text">
+								Desenvolvedor Full Stack apaixonado por criar soluções
+								inovadoras e eficientes. Com experiência em diversas tecnologias
+								modernas, busco sempre aprender e aplicar as melhores práticas
+								de desenvolvimento.
+							</p>
+							<div class="tech-stats">
+								<div class="tech-stat">
+									<div class="tech-stat-value" id="totalRepos">0</div>
+									<div class="tech-stat-label">Repositórios</div>
+								</div>
+								<div class="tech-stat">
+									<div class="tech-stat-value" id="totalStars">0</div>
+									<div class="tech-stat-label">Estrelas</div>
+								</div>
+								<div class="tech-stat">
+									<div class="tech-stat-value" id="topLanguage">-</div>
+									<div class="tech-stat-label">Linguagem Principal</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="content-section" id="projectsSection">
+						<div class="panel-header">
+							<i class="fas fa-project-diagram"></i>
+							<h2>Projetos do GitHub</h2>
+						</div>
+						<div class="github-projects">
+							<div class="projects-grid" id="projectsGrid">
+								<!-- Projects will be loaded here -->
+							</div>
+						</div>
+					</div>
+
+					<div class="content-section" id="contactSection">
+						<div class="panel-header">
+							<i class="fas fa-envelope"></i>
+							<h2>Entre em Contato</h2>
+						</div>
+						<div class="contact-content">
+							<p style="color: var(--text-secondary); margin-bottom: 2rem">
+								Estou sempre aberto a novas oportunidades e colaborações. Vamos
+								criar algo incrível juntos!
+							</p>
+							<div class="contact-links">
+								<a
+									href="https://github.com/ralfendeck25"
+									target="_blank"
+									class="contact-link"
+								>
+									<i class="fab fa-github"></i> GitHub
+								</a>
+								<a href="mailto:parispeterson89@gmail.com" class="contact-link">
+									<i class="fas fa-envelope"></i> Email
+								</a>
+								<a
+									href="https://www.linkedin.com/in/peterson-paris-750ba493/"
+									class="contact-link"
+									target="_blank"
+								>
+									<i class="fab fa-linkedin"></i> LinkedIn
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Skill Details (hidden by default) -->
+					<div class="content-section" id="skillSection">
+						<div class="skill-details" id="skillDetails">
+							<!-- Skill details will be loaded here -->
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Footer Aprimorado -->
+			<footer class="footer">
+				<div class="footer-content">
+					<div class="footer-grid">
+						<!-- Sobre -->
+						<div class="footer-section footer-about">
+							<h3>Sobre o Portfólio</h3>
+							<p>
+								Este portfólio é alimentado em tempo real pelo GitHub, mostrando
+								minhas habilidades, projetos e tecnologias que domino. Cada
+								atualização no GitHub é refletida automaticamente aqui.
+							</p>
+							<div class="tech-tags" id="footerTechTags">
+								<!-- Tecnologias serão carregadas dinamicamente -->
+							</div>
+						</div>
+
+						<!-- Links Rápidos -->
+						<div class="footer-section footer-links">
+							<h3>Links Rápidos</h3>
+							<ul>
+								<li>
+									<a href="#aboutSection" onclick="scrollToSection('about')"
+										><i class="fas fa-chevron-right"></i> Sobre Mim</a
+									>
+								</li>
+								<li>
+									<a
+										href="#projectsSection"
+										onclick="scrollToSection('projects')"
+										><i class="fas fa-chevron-right"></i> Projetos</a
+									>
+								</li>
+								<li>
+									<a href="#contactSection" onclick="scrollToSection('contact')"
+										><i class="fas fa-chevron-right"></i> Contato</a
+									>
+								</li>
+								<li>
+									<a href="https://github.com/ralfendeck25" target="_blank"
+										><i class="fas fa-chevron-right"></i> GitHub</a
+									>
+								</li>
+								<li>
+									<a href="PETERSON_PARIS.pdf" download
+										><i class="fas fa-chevron-right"></i> Baixar CV</a
+									>
+								</li>
+							</ul>
+						</div>
+
+						<!-- Contato -->
+						<div class="footer-section footer-contact">
+							<h3>Contato</h3>
+							<p><i class="fas fa-envelope"></i> parispeterson89@gmail.com</p>
+							<p><i class="fas fa-map-marker-alt"></i> Joinville - Santa Catarina, Brasil</p>
+
+							<div class="social-links">
+								<a
+									href="https://github.com/ralfendeck25"
+									target="_blank"
+									class="social-link"
+								>
+									<i class="fab fa-github"></i>
+								</a>
+								<a
+									href="https://www.linkedin.com/in/peterson-paris-750ba493/"
+									target="_blank"
+									class="social-link"
+								>
+									<i class="fab fa-linkedin"></i>
+								</a>
+								<a href="mailto:parispeterson89@gmail.com" class="social-link">
+									<i class="fas fa-envelope"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Stats em Tempo Real -->
+					<div class="stats-counter" id="footerStats">
+						<div class="stat-item">
+							<span class="stat-number" id="footerRepos">0</span>
+							<span class="stat-label">Repositórios</span>
+						</div>
+						<div class="stat-item">
+							<span class="stat-number" id="footerStars">0</span>
+							<span class="stat-label">Estrelas</span>
+						</div>
+						<div class="stat-item">
+							<span class="stat-number" id="footerFollowers">0</span>
+							<span class="stat-label">Seguidores</span>
+						</div>
+						<div class="stat-item">
+							<span class="stat-number" id="footerLanguages">0</span>
+							<span class="stat-label">Linguagens</span>
+						</div>
+					</div>
+
+					<!-- Bottom -->
+					<div class="footer-bottom">
+						<p class="copyright">
+							© 2024 Peterson PARIS. Todos os direitos reservados.
+						</p>
+						<a
+							href="https://github.com/ralfendeck25"
+							target="_blank"
+							class="github-live"
+						>
+							<span class="live-indicator"></span>
+							<i class="fab fa-github"></i>
+							<span>Dados em tempo real do GitHub</span>
+						</a>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+		<script>
+			// Configuração
+			const GITHUB_USERNAME = 'ralfendeck25';
+			const GITHUB_API = `https://api.github.com/users/${GITHUB_USERNAME}`;
+
+			// Tecnologias para detectar automaticamente
+			const TECH_MAP = {
+				JavaScript: {
+					icon: 'https://techstack-generator.vercel.app/js-icon.svg',
+					color: '#f7df1e',
+				},
+				TypeScript: {
+					icon: 'https://techstack-generator.vercel.app/ts-icon.svg',
+					color: '#3178c6',
+				},
+				React: {
+					icon: 'https://techstack-generator.vercel.app/react-icon.svg',
+					color: '#61dafb',
+				},
+				'Node.js': {
+					icon: 'https://techstack-generator.vercel.app/js-icon.svg',
+					color: '#68a063',
+				},
+				Python: {
+					icon: 'https://techstack-generator.vercel.app/python-icon.svg',
+					color: '#3776ab',
+				},
+				Java: {
+					icon: 'https://techstack-generator.vercel.app/java-icon.svg',
+					color: '#007396',
+				},
+				'C#': {
+					icon: 'https://techstack-generator.vercel.app/csharp-icon.svg',
+					color: '#9b4f96',
+				},
+				Docker: {
+					icon: 'https://techstack-generator.vercel.app/docker-icon.svg',
+					color: '#2496ed',
+				},
+				Kubernetes: {
+					icon: 'https://techstack-generator.vercel.app/kubernetes-icon.svg',
+					color: '#326ce5',
+				},
+				AWS: {
+					icon: 'https://techstack-generator.vercel.app/aws-icon.svg',
+					color: '#ff9900',
+				},
+				'Next.js': {
+					icon: 'https://techstack-generator.vercel.app/nextjs-icon.svg',
+					color: '#000000',
+				},
+				'Vue.js': {
+					icon: 'https://techstack-generator.vercel.app/vue-icon.svg',
+					color: '#42b883',
+				},
+				Angular: {
+					icon: 'https://techstack-generator.vercel.app/angular-icon.svg',
+					color: '#dd0031',
+				},
+				GraphQL: {
+					icon: 'https://techstack-generator.vercel.app/graphql-icon.svg',
+					color: '#e10098',
+				},
+				PostgreSQL: {
+					icon: 'https://techstack-generator.vercel.app/psql-icon.svg',
+					color: '#336791',
+				},
+				MongoDB: {
+					icon: 'https://techstack-generator.vercel.app/mongoDB-icon.svg',
+					color: '#47a248',
+				},
+				Redis: {
+					icon: 'https://techstack-generator.vercel.app/redis-icon.svg',
+					color: '#d82c20',
+				},
+				Git: {
+					icon: 'https://techstack-generator.vercel.app/github-icon.svg',
+					color: '#f05032',
+				},
+			};
+
+			// Estado da aplicação
+			const state = {
+				userData: null,
+				repos: [],
+				detectedTechs: [],
+				selectedTech: null,
+				isLoading: true,
+			};
+
+			// Inicialização
+			document.addEventListener('DOMContentLoaded', async () => {
+				try {
+					await loadGitHubData();
+					createTechGalaxy();
+					setupEventListeners();
+					updateFooter();
+				} catch (error) {
+					console.error('Erro ao carregar dados:', error);
+					showFallbackData();
+				} finally {
+					hideLoading();
+				}
+			});
+
+			async function loadGitHubData() {
+				// Carregar dados do usuário
+				const userResponse = await fetch(GITHUB_API);
+				state.userData = await userResponse.json();
+
+				// Carregar repositórios
+				const reposResponse = await fetch(
+					`${GITHUB_API}/repos?sort=updated&per_page=100`
+				);
+				state.repos = await reposResponse.json();
+
+				// Detectar tecnologias
+				detectTechnologies();
+
+				// Atualizar UI
+				updateUserInfo();
+				updateProjects();
+			}
+
+			function detectTechnologies() {
+				const techCount = {};
+
+				// Analisar cada repositório
+				state.repos.forEach((repo) => {
+					if (repo.language && TECH_MAP[repo.language]) {
+						techCount[repo.language] = (techCount[repo.language] || 0) + 1;
+					}
+
+					// Verificar tecnologias no nome e descrição
+					const text = `${repo.name} ${repo.description || ''}`.toLowerCase();
+					Object.keys(TECH_MAP).forEach((tech) => {
+						if (text.includes(tech.toLowerCase())) {
+							techCount[tech] = (techCount[tech] || 0) + 1;
+						}
+					});
+				});
+
+				// Converter para array e ordenar
+				state.detectedTechs = Object.entries(techCount)
+					.map(([name, count]) => ({
+						name,
+						count,
+						...TECH_MAP[name],
+					}))
+					.sort((a, b) => b.count - a.count)
+					.slice(0, 12); // Top 12 tecnologias
+			}
+
+			function updateUserInfo() {
+				// Stats do GitHub
+				const statsHTML = `
+                <div class="stat">
+                    <i class="fas fa-code-branch"></i>
+                    <span>${state.userData.public_repos} Repositórios</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-star"></i>
+                    <span>${state.userData.followers} Seguidores</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-users"></i>
+                    <span>Seguindo ${state.userData.following}</span>
+                </div>
+            `;
+
+				document.getElementById('githubStats').innerHTML = statsHTML;
+
+				// Atualizar estatísticas
+				document.getElementById('totalRepos').textContent =
+					state.userData.public_repos;
+				document.getElementById('totalStars').textContent = state.repos.reduce(
+					(sum, repo) => sum + repo.stargazers_count,
+					0
+				);
+
+				// Linguagem mais usada
+				const langCount = {};
+				state.repos.forEach((repo) => {
+					if (repo.language) {
+						langCount[repo.language] = (langCount[repo.language] || 0) + 1;
+					}
+				});
+
+				const topLang = Object.entries(langCount).sort(
+					(a, b) => b[1] - a[1]
+				)[0];
+
+				if (topLang) {
+					document.getElementById('topLanguage').textContent = topLang[0];
+				}
+			}
+
+			function updateProjects() {
+				const container = document.getElementById('projectsGrid');
+				const topProjects = state.repos
+					.filter((repo) => !repo.fork && repo.stargazers_count > 0)
+					.sort((a, b) => b.stargazers_count - a.stargazers_count)
+					.slice(0, 6);
+
+				if (topProjects.length === 0) {
+					container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <i class="fas fa-code-branch" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>Nenhum projeto público encontrado no GitHub.</p>
+                    </div>
+                `;
+					return;
+				}
+
+				container.innerHTML = topProjects
+					.map(
+						(repo) => `
+                <div class="project-card">
+                    <div class="project-header">
+                        <div>
+                            <h3 class="project-title">${repo.name}</h3>
+                            <p class="project-description">${
+															repo.description || 'Sem descrição'
+														}</p>
+                        </div>
+                        <a href="${
+													repo.html_url
+												}" target="_blank" style="color: var(--accent-blue);">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                    
+                    ${
+											repo.language
+												? `
+                        <div class="project-tech">
+                            <span class="tech-tag">${repo.language}</span>
+                        </div>
+                    `
+												: ''
+										}
+                    
+                    <div class="project-stats">
+                        <div class="project-stat">
+                            <i class="fas fa-star"></i>
+                            <span>${repo.stargazers_count}</span>
+                        </div>
+                        <div class="project-stat">
+                            <i class="fas fa-code-branch"></i>
+                            <span>${repo.forks_count}</span>
+                        </div>
+                        ${
+													repo.updated_at
+														? `
+                            <div class="project-stat">
+                                <i class="fas fa-clock"></i>
+                                <span>${formatDate(repo.updated_at)}</span>
+                            </div>
+                        `
+														: ''
+												}
+                    </div>
+                </div>
+            `
+					)
+					.join('');
+			}
+
+			function createTechGalaxy() {
+				const container = document.getElementById('techGalaxy');
+
+				// Limpar cards existentes
+				container
+					.querySelectorAll('.tech-card')
+					.forEach((card) => card.remove());
+
+				// Criar cards para cada tecnologia detectada
+				state.detectedTechs.forEach((tech, index) => {
+					const angle = (index / state.detectedTechs.length) * Math.PI * 2;
+					const radius = 180 + (index % 3) * 60; // Distância variada
+					const x = Math.cos(angle) * radius;
+					const y = Math.sin(angle) * radius;
+
+					const card = document.createElement('div');
+					card.className = 'tech-card';
+					card.style.left = `calc(50% + ${x}px)`;
+					card.style.top = `calc(50% + ${y}px)`;
+					card.dataset.techName = tech.name;
+
+					const img = document.createElement('img');
+					img.className = 'tech-logo';
+					img.src = tech.icon;
+					img.alt = tech.name;
+
+					card.appendChild(img);
+					container.appendChild(card);
+
+					// Event listeners
+					card.addEventListener('click', () => showTechDetails(tech));
+					card.addEventListener('mouseenter', () => {
+						card.style.transform = `scale(1.15) translateY(-5px)`;
+					});
+					card.addEventListener('mouseleave', () => {
+						if (state.selectedTech !== tech.name) {
+							card.style.transform = '';
+						}
+					});
+				});
+			}
+
+			function updateFooter() {
+				// Atualizar estatísticas no footer
+				document.getElementById('footerRepos').textContent =
+					state.userData.public_repos;
+				document.getElementById('footerStars').textContent = state.repos.reduce(
+					(sum, repo) => sum + repo.stargazers_count,
+					0
+				);
+				document.getElementById('footerFollowers').textContent =
+					state.userData.followers;
+
+				// Contar linguagens únicas
+				const uniqueLangs = new Set();
+				state.repos.forEach((repo) => {
+					if (repo.language) {
+						uniqueLangs.add(repo.language);
+					}
+				});
+				document.getElementById('footerLanguages').textContent =
+					uniqueLangs.size;
+
+				// Atualizar tags de tecnologias no footer
+				const techTagsContainer = document.getElementById('footerTechTags');
+				const topTechs = state.detectedTechs.slice(0, 8); // Top 8 tecnologias
+
+				techTagsContainer.innerHTML = topTechs
+					.map(
+						(tech) => `
+                <span class="tech-tag">${tech.name}</span>
+            `
+					)
+					.join('');
+			}
+
+			function showTechDetails(tech) {
+				// Remover seleção anterior
+				document.querySelectorAll('.tech-card').forEach((card) => {
+					card.classList.remove('active');
+				});
+
+				// Selecionar card atual
+				const selectedCard = document.querySelector(
+					`[data-tech-name="${tech.name}"]`
+				);
+				if (selectedCard) {
+					selectedCard.classList.add('active');
+				}
+
+				// Mostrar detalhes
+				document.querySelectorAll('.content-section').forEach((section) => {
+					section.classList.remove('active');
+				});
+				document.querySelectorAll('.nav-tab').forEach((tab) => {
+					tab.classList.remove('active');
+				});
+
+				document.getElementById('skillSection').classList.add('active');
+
+				// Criar conteúdo dos detalhes
+				const reposWithTech = state.repos
+					.filter(
+						(repo) =>
+							repo.language === tech.name ||
+							(repo.description &&
+								repo.description
+									.toLowerCase()
+									.includes(tech.name.toLowerCase()))
+					)
+					.slice(0, 3);
+
+				const detailsHTML = `
+                <div class="skill-header">
+                    <img src="${tech.icon}" alt="${
+					tech.name
+				}" class="skill-logo">
+                    <h3 class="skill-title">${tech.name}</h3>
+                </div>
+                
+                <p class="skill-description">
+                    Tecnologia utilizada em <strong>${
+											tech.count
+										}</strong> repositórios.
+                    ${getTechDescription(tech.name)}
+                </p>
+                
+                <div class="skill-info">
+                    <div class="info-item">
+                        <div class="info-label">Repositórios</div>
+                        <div class="info-value">${tech.count}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Posição</div>
+                        <div class="info-value">#${
+													state.detectedTechs.findIndex(
+														(t) => t.name === tech.name
+													) + 1
+												}</div>
+                    </div>
+                </div>
+                
+                ${
+									reposWithTech.length > 0
+										? `
+                    <div style="margin-top: 2rem;">
+                        <h4 style="color: var(--accent-blue); margin-bottom: 1rem;">
+                            <i class="fas fa-project-diagram"></i> Projetos com ${
+															tech.name
+														}
+                        </h4>
+                        <div style="display: grid; gap: 1rem;">
+                            ${reposWithTech
+															.map(
+																(repo) => `
+                                <div style="
+                                    background: rgba(255, 255, 255, 0.03);
+                                    padding: 1rem;
+                                    border-radius: 8px;
+                                    border: 1px solid rgba(255, 255, 255, 0.1);
+                                ">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <strong>${repo.name}</strong>
+                                        <a href="${
+																					repo.html_url
+																				}" target="_blank" style="color: var(--accent-blue);">
+                                            <i class="fab fa-github"></i>
+                                        </a>
+                                    </div>
+                                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                                        ${repo.description || 'Sem descrição'}
+                                    </p>
+                                </div>
+                            `
+															)
+															.join('')}
+                        </div>
+                    </div>
+                `
+										: ''
+								}
+            `;
+
+				document.getElementById('skillDetails').innerHTML = detailsHTML;
+				state.selectedTech = tech.name;
+			}
+
+			function getTechDescription(techName) {
+				const descriptions = {
+					JavaScript:
+						'Linguagem de programação fundamental para desenvolvimento web moderno.',
+					TypeScript:
+						'JavaScript com tipagem estática para desenvolvimento escalável.',
+					React:
+						'Biblioteca JavaScript para construção de interfaces de usuário.',
+					'Node.js':
+						'Runtime JavaScript para desenvolvimento de aplicações backend.',
+					Python: 'Linguagem versátil para backend, data science e automação.',
+					Java: 'Linguagem enterprise para aplicações robustas e escaláveis.',
+					'C#': 'Linguagem .NET para desenvolvimento Windows e aplicações web.',
+					Docker: 'Plataforma de containerização para empacotamento e deploy.',
+					Kubernetes: 'Sistema de orquestração de containers em escala.',
+					AWS: 'Plataforma de cloud computing líder do mercado.',
+				};
+
+				return (
+					descriptions[techName] ||
+					'Tecnologia amplamente utilizada no desenvolvimento moderno.'
+				);
+			}
+
+			function setupEventListeners() {
+				// Navegação por tabs
+				document.querySelectorAll('.nav-tab').forEach((tab) => {
+					tab.addEventListener('click', () => {
+						const section = tab.dataset.section;
+
+						// Atualizar tabs
+						document
+							.querySelectorAll('.nav-tab')
+							.forEach((t) => t.classList.remove('active'));
+						tab.classList.add('active');
+
+						// Mostrar seção correspondente
+						document.querySelectorAll('.content-section').forEach((sec) => {
+							sec.classList.remove('active');
+						});
+
+						// Resetar seleção de tecnologia
+						document.querySelectorAll('.tech-card').forEach((card) => {
+							card.classList.remove('active');
+						});
+						state.selectedTech = null;
+
+						document
+							.getElementById(`${section}Section`)
+							.classList.add('active');
+					});
+				});
+
+				// Animar galáxia
+				animateGalaxy();
+			}
+
+			function animateGalaxy() {
+				const cards = document.querySelectorAll('.tech-card');
+				let time = 0;
+
+				function animate() {
+					time += 0.002;
+
+					cards.forEach((card, index) => {
+						const radius = 180 + (index % 3) * 60;
+						const speed = 0.3 + (index % 3) * 0.1;
+						const angle = (index / cards.length) * Math.PI * 2 + time * speed;
+
+						const x = Math.cos(angle) * radius;
+						const y = Math.sin(angle) * radius;
+
+						card.style.left = `calc(50% + ${x}px)`;
+						card.style.top = `calc(50% + ${y}px)`;
+
+						// Rotação suave do logo
+						card.querySelector('.tech-logo').style.transform = `rotate(${
+							angle * 2
+						}rad)`;
+					});
+
+					requestAnimationFrame(animate);
+				}
+
+				animate();
+			}
+
+			// Função para rolar até seção
+			function scrollToSection(sectionId) {
+				document.getElementById(`${sectionId}Section`).scrollIntoView({
+					behavior: 'smooth',
+				});
+
+				// Ativar tab correspondente
+				document.querySelectorAll('.nav-tab').forEach((tab) => {
+					tab.classList.remove('active');
+					if (tab.dataset.section === sectionId) {
+						tab.classList.add('active');
+					}
+				});
+
+				// Mostrar seção
+				document.querySelectorAll('.content-section').forEach((sec) => {
+					sec.classList.remove('active');
+				});
+				document.getElementById(`${sectionId}Section`).classList.add('active');
+			}
+
+			function hideLoading() {
+				document.getElementById('loading').classList.add('hidden');
+				setTimeout(() => {
+					document.getElementById('loading').style.display = 'none';
+				}, 500);
+			}
+
+			function formatDate(dateString) {
+				const date = new Date(dateString);
+				const now = new Date();
+				const diffTime = Math.abs(now - date);
+				const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+				if (diffDays === 0) return 'Hoje';
+				if (diffDays === 1) return 'Ontem';
+				if (diffDays < 30) return `${diffDays} dias atrás`;
+				if (diffDays < 365) return `${Math.floor(diffDays / 30)} meses atrás`;
+				return `${Math.floor(diffDays / 365)} anos atrás`;
+			}
+
+			function showFallbackData() {
+				// Dados de fallback caso a API falhe
+				document.getElementById('githubStats').innerHTML = `
+                <div class="stat">
+                    <i class="fas fa-code-branch"></i>
+                    <span>Projetos GitHub</span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-star"></i>
+                    <span>0 Estrelas</span>
+                </div>
+            `;
+
+				document.getElementById('projectsGrid').innerHTML = `
+                <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                    <i class="fas fa-wifi-slash" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>Erro ao carregar projetos. Verifique sua conexão.</p>
+                </div>
+            `;
+			}
+		</script>
+	</body>
+</html>

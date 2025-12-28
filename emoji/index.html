@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Memória com Emojis</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Jogo da Memória</h2>
+        
+        <div class="game"></div>
+
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-label">Movimentos</span>
+                <span id="moves" class="stat-value">0</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Tempo</span>
+                <span id="timer" class="stat-value">00:00</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Pares</span>
+                <span id="pairs" class="stat-value">0/8</span>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="reset">
+                <i class="fas fa-redo"></i> Reiniciar
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        const emojis = [
+            "😀", "😀",
+            "😡", "😡",
+            "😶‍🌫️", "😶‍🌫️",
+            "😂", "😂",
+            "😍", "😍",
+            "😎", "😎",
+            "😭", "😭",
+            "❤️", "❤️"
+        ];
+
+        let openCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+        let startTime = null;
+        let timerInterval = null;
+
+        // Elementos do DOM
+        const movesElement = document.getElementById('moves');
+        const timerElement = document.getElementById('timer');
+        const pairsElement = document.getElementById('pairs');
+        const resetButton = document.querySelector('.reset');
+        const gameContainer = document.querySelector('.game');
+
+        // Inicializa o jogo
+        function initGame() {
+            // Limpa o tabuleiro
+            gameContainer.innerHTML = '';
+            
+            // Embaralha as cartas
+            let shuffleEmojis = [...emojis].sort(() => Math.random() - 0.5);
+            
+            // Cria as cartas
+            shuffleEmojis.forEach((emoji, index) => {
+                let card = document.createElement('div');
+                card.className = 'item';
+                card.innerHTML = emoji;
+                card.style.setProperty('--card-index', index);
+                card.dataset.emoji = emoji;
+                card.onclick = handleCardClick;
+                gameContainer.appendChild(card);
+            });
+            
+            // Reseta variáveis do jogo
+            openCards = [];
+            matchedPairs = 0;
+            moves = 0;
+            movesElement.textContent = '0';
+            timerElement.textContent = '00:00';
+            pairsElement.textContent = '0/8';
+            
+            // Para o timer anterior se existir
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            // Inicia novo timer
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Esconde mensagem de vitória se estiver visível
+            const winMessage = document.querySelector('.win-message');
+            if (winMessage) {
+                winMessage.remove();
+            }
+        }
+
+        // Atualiza o timer
+        function updateTimer() {
+            if (!startTime) return;
+            
+            const elapsed = Date.now() - startTime;
+            const minutes = Math.floor(elapsed / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Manipula o clique na carta
+        function handleCardClick() {
+            // Verifica se pode clicar
+            if (
+                openCards.length >= 2 ||
+                this.classList.contains('boxOpen') ||
+                this.classList.contains('boxMatch')
+            ) {
+                return;
+            }
+            
+            // Vira a carta
+            this.classList.add('boxOpen');
+            openCards.push(this);
+            
+            // Atualiza movimentos
+            if (openCards.length === 2) {
+                moves++;
+                movesElement.textContent = moves;
+                setTimeout(checkMatch, 500);
+            }
+        }
+
+        // Verifica se as cartas combinam
+        function checkMatch() {
+            if (openCards.length !== 2) return;
+            
+            const [card1, card2] = openCards;
+            const isMatch = card1.dataset.emoji === card2.dataset.emoji;
+            
+            if (isMatch) {
+                // Cartas combinam
+                card1.classList.add('boxMatch');
+                card2.classList.add('boxMatch');
+                matchedPairs++;
+                pairsElement.textContent = `${matchedPairs}/8`;
+                
+                // Verifica se o jogo acabou
+                if (matchedPairs === emojis.length / 2) {
+                    endGame();
+                }
+            } else {
+                // Cartas não combinam - vira de volta
+                setTimeout(() => {
+                    card1.classList.remove('boxOpen');
+                    card2.classList.remove('boxOpen');
+                }, 500);
+            }
+            
+            // Limpa as cartas abertas
+            openCards = [];
+        }
+
+        // Finaliza o jogo
+        function endGame() {
+            clearInterval(timerInterval);
+            
+            // Calcula tempo final
+            const elapsed = Date.now() - startTime;
+            const minutes = Math.floor(elapsed / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            
+            // Mostra mensagem de vitória
+            setTimeout(() => {
+                const winMessage = document.createElement('div');
+                winMessage.className = 'win-message show';
+                winMessage.innerHTML = `
+                    <div class="win-text">🎉 Parabéns! 🎉</div>
+                    <div class="win-stats">
+                        <p><i class="fas fa-clock"></i> Tempo: ${minutes}:${seconds.toString().padStart(2, '0')}</p>
+                        <p><i class="fas fa-shoe-prints"></i> Movimentos: ${moves}</p>
+                        <p><i class="fas fa-star"></i> Pontuação: ${calculateScore(moves, elapsed)}</p>
+                    </div>
+                    <button class="play-again" onclick="initGame()">
+                        <i class="fas fa-play"></i> Jogar Novamente
+                    </button>
+                `;
+                document.querySelector('.container').appendChild(winMessage);
+                
+                // Efeito de confete
+                createConfetti();
+            }, 1000);
+        }
+
+        // Calcula a pontuação
+        function calculateScore(moves, time) {
+            const timeScore = Math.max(0, 1000 - Math.floor(time / 1000));
+            const movesScore = Math.max(0, 500 - moves * 10);
+            return timeScore + movesScore;
+        }
+
+        // Cria efeito de confete
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            const confettiContainer = document.createElement('div');
+            confettiContainer.style.position = 'absolute';
+            confettiContainer.style.top = '0';
+            confettiContainer.style.left = '0';
+            confettiContainer.style.width = '100%';
+            confettiContainer.style.height = '100%';
+            confettiContainer.style.pointerEvents = 'none';
+            confettiContainer.style.zIndex = '99';
+            confettiContainer.style.overflow = 'hidden';
+            confettiContainer.style.borderRadius = '25px';
+            
+            document.querySelector('.container').appendChild(confettiContainer);
+            
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.top = '-20px';
+                
+                confettiContainer.appendChild(confetti);
+                
+                // Animação do confete
+                confetti.animate([
+                    { transform: `translateY(0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
+                });
+                
+                // Remove o confete após a animação
+                setTimeout(() => {
+                    confetti.remove();
+                    if (i === 149) {
+                        confettiContainer.remove();
+                    }
+                }, 5000);
+            }
+        }
+
+        // Adiciona partículas decorativas
+        function addParticles() {
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'particles';
+            document.querySelector('.container').appendChild(particlesContainer);
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.width = `${Math.random() * 10 + 5}px`;
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Inicializa quando a página carrega
+        window.onload = function() {
+            initGame();
+            addParticles();
+            
+            // Adiciona evento ao botão reset
+            resetButton.addEventListener('click', initGame);
+        };
+    </script>
+</body>
+</html>

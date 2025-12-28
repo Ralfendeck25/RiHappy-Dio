@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Piano</title>
+    <link rel="shortcut icon" href="tipo.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,600;0,700;1,500&display=swap" rel="stylesheet">   
+    <link rel="stylesheet" href="./src/styles/reset.css">
+    <link rel="stylesheet" href="./src/styles/main.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h2>RALFENDECK25</h2>
+            <div class="column volume-slider">
+                <span>Volume</span>
+                <input type="range" min="0" max="1" value="0.2" step="any">
+            </div>
+            <div class="column keys-check">
+                <span>Teclas</span>
+                <input type="checkbox" checked>
+            </div>
+        </header>
+        <!-- Substitua a seção do piano-keys por esta versão corrigida -->
+<ul class="piano-keys">
+    <!-- Oitava 1 -->
+    <li class="key white" data-key="a"><span>A</span></li>
+    <li class="key black" data-key="w"><span>W</span></li>
+    <li class="key white" data-key="s"><span>S</span></li>
+    <li class="key black" data-key="e"><span>E</span></li>
+    <li class="key white" data-key="d"><span>D</span></li>
+    
+    <li class="key white" data-key="f"><span>F</span></li>
+    <li class="key black" data-key="t"><span>T</span></li>
+    <li class="key white" data-key="g"><span>G</span></li>
+    <li class="key black" data-key="y"><span>Y</span></li>
+    <li class="key white" data-key="h"><span>H</span></li>
+    <li class="key black" data-key="u"><span>U</span></li>
+    <li class="key white" data-key="j"><span>J</span></li>
+    
+    <!-- Oitava 2 -->
+    <li class="key white" data-key="k"><span>K</span></li>
+    <li class="key black" data-key="o"><span>O</span></li>
+    <li class="key white" data-key="l"><span>L</span></li>
+    <li class="key black" data-key="p"><span>P</span></li>
+    <li class="key white" data-key=";"><span>;</span></li>
+</ul>
+    </div>
+  
+   <footer class="footer">
+    
+    <ul class="social-icon">
+      <li class="social-icon__item"><a class="social-icon__link" href="https://github.com/ralfendeck25" target="_blank">
+          <ion-icon name="logo-github"></ion-icon>
+        </a></li>
+      <li class="social-icon__item"><a class="social-icon__link" href="https://codepen.io/Ralfendeck25/pen/KwMppOY" target="_blank">
+        <ion-icon name='logo-codepen'></ion-icon>
+        </a></li>
+      <li class="social-icon__item"><a class="social-icon__link" href="https://www.linkedin.com/in/peterson-paris-750ba493/" target="_blank">
+          <ion-icon name="logo-linkedin"></ion-icon>
+        </a></li>
+     
+    </ul>
+    
+    <p>&copy; 2025 Peterson PARIS </p>
+  </footer>
+
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="./src/scripts/engine.js" defer></script>
+    <script src="main.js" defer></script>
+</body>
+</html>
