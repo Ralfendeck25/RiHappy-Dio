@@ -1,0 +1,29 @@
+# VS Code
+.vscode/
+*.code-workspace
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Diretório de dependência
+node_modules/
+
+# Sensitive data
+.env
+.env.local
+
+# Build
+dist/
+build/
+out/
